@@ -9,6 +9,7 @@
 ## 🎮 完成ゲームのプレビュー
 
 以下は、ワークショップの終わりまでに設計・ロジック検証・RaylibでのUI実装を行う最終アプリケーションのプレビューです：
+
 ![Mario Game](https://media.giphy.com/media/p0KEKXBzvuwtv8JYVb/giphy.gif)
 
 ---
@@ -25,15 +26,16 @@
 
 ---
 
-## 🛠️ セットアップ手順（ステップバイステップ）
+## 🛠️ 開発ツールのインストール
 
-**セッション1が始まる前に**、ご使用のOSに合わせた手順に従って必要な開発環境をインストールしてください。
+お使いのOSの手順に従い、**セッション1の開始前**に以下のツールをインストールしてください。
 
-### 🪟 Windowsでのセットアップ（MSYS2 + MinGW-w64）
+### 1. コンパイラとRaylibグラフィック環境のセットアップ
 
-1. **MSYS2のインストール:** [msys2.org](https://www.msys2.org/) からインストーラーをダウンロードし、デフォルトのパス（`C:\msys64`）にインストールします。
-2. **GCC、Make、Raylibのインストール:**
-   スタートメニューから **MSYS2 UCRT64** を開いて以下を実行します:
+#### 🪟 Windows (MSYS2 + MinGW-w64)
+
+1. [msys2.org](https://www.msys2.org/) からインストーラーをダウンロードして実行します（デフォルトのパス `C:\msys64` の使用を推奨）。
+2. スタートメニューから **MSYS2 UCRT64** を開き、GCC、Make、Raylibをインストールします:
 
 ```bash
 pacman -Syu
@@ -41,55 +43,39 @@ pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make mingw-w64-ucrt-x8
 
 ```
 
-3. **GCCをWindowsの環境変数（PATH）に追加:**
+3. GCCをシステムの環境変数（PATH）に追加します:
 
 - `Win + R` を押し、`sysdm.cpl` と入力して **Enter** を押します。
-- **詳細設定** タブ > **環境変数** を開きます。
-- **システム環境変数** の欄にある `Path` を選択して **編集** をクリックし、`C:\msys64\ucrt64\bin` を追加します。
-- 設定を保存し、開いているコマンドプロンプト（`cmd`）をすべて再起動します。`gcc --version` と入力して正しく認識されるか確認してください。
+- **「詳細設定」** タブ > **「環境変数」** を開き、システム環境変数の `Path` をダブルクリックします。
+- **「新規」** をクリックして `C:\msys64\ucrt64\bin` を追加し、**OK** をクリックします。
+- 開いているターミナルをすべて再起動し、`gcc --version` で動作確認を行います。
 
-4. **コンパイルコマンド:**
+#### 🍎 macOS (Homebrew + Apple Clang)
 
-```cmd
-gcc main.c -o game.exe -lraylib -lopengl32 -lgdi32 -lwinmm
-
-```
-
-### 🍎 macOSでのセットアップ（Homebrew + Apple Clang）
-
-1. **Xcode Command Line Toolsのインストール:**
-   ターミナルを開いて以下を実行します:
+1. ターミナルで Xcode Command Line Tools をインストールします:
 
 ```bash
 xcode-select --install
 
 ```
 
-2. **Homebrewのインストール（未インストールの環境のみ）:**
+2. Homebrew をインストールします（未インストールのブラウザ/環境の場合）:
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 ```
 
-3. **Raylibのインストール:**
+3. Raylib をインストールします:
 
 ```bash
 brew install raylib
 
 ```
 
-4. **コンパイルコマンド:**
+#### 🐧 Linux (Ubuntu / Debian)
 
-```bash
-gcc main.c -o game -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-
-```
-
-### 🐧 Linuxでのセットアップ（Ubuntu / Debian）
-
-1. **ビルドツールとRaylibのインストール:**
-   ターミナルを開いて以下を実行します:
+GCC、Make、Git、および開発用ヘッダー付きの Raylib をインストールします:
 
 ```bash
 sudo apt update
@@ -97,54 +83,21 @@ sudo apt install -y build-essential git libraylib-dev libasound2-dev libx11-dev 
 
 ```
 
-2. **コンパイルコマンド:**
+---
 
-```bash
-gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+### 2. 共通ツールのセットアップ
 
-```
+- **Git CLI:** [git-scm.com](https://git-scm.com/) からダウンロードしてインストールします。
+- **Visual Studio Code:** [code.visualstudio.com](https://code.visualstudio.com/) からダウンロードします。
+- 推奨拡張機能: **C/C++** (Microsoft製) および **C/C++ Compile Run** または **CMake Tools**
+
+- **Claude Desktop / AI アシスタント:** [claude.ai/download](https://claude.ai/download) からダウンロードするか、指定されたプラットフォームにアクセスします。
 
 ---
 
-### 🧰 その他必要なツール
+## 🚀 ステップ 3: リポジトリのクローンとセットアップの検証
 
-- **Git CLI:** [git-scm.com](https://git-scm.com/) からダウンロードしてインストール。
-- **Visual Studio Code:** [code.visualstudio.com](https://code.visualstudio.com/) からダウンロード。
-- 推奨拡張機能: **C/C++**（Microsoft製）、**C/C++ Compile Run** または **CMake Tools**。
-- **Claude Desktop / AIアシスタント:** [claude.ai/download](https://claude.ai/download) からダウンロード、または指定されたプラットフォームにアクセス。
-
----
-
-### 🧪 動作確認（`test_raylib.c`）
-
-`test_raylib.c` というテスト用ファイルを作成し、コンパイルして環境構築が成功したか確認します：
-
-```c
-#include "raylib.h"
-
-int main(void) {
-    InitWindow(800, 450, "Mario Forensic Lab - Environment Test");
-    SetTargetFPS(60);
-
-    while (!WindowShouldClose()) {
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("Raylib environment successfully installed!", 150, 200, 20, DARKGRAY);
-            DrawRectangle(375, 250, 50, 50, RED);
-        EndDrawing();
-    }
-
-    CloseWindow();
-    return 0;
-}
-
-```
-
-お使いのOSに対応した上記のコンパイルコマンドを実行してください。赤い四角形が表示されたウィンドウが立ち上がれば、環境構築は完了です！
-
----
-
-## 🚀 はじめに：リポジトリのクローン手順
+ツールのインストールが完了したら、このリポジトリをクローンし、含まれている `test_raylib.c` ファイルを使用してコンパイル環境をテストします。
 
 1. ターミナルまたはコマンドプロンプトを開き、作業用フォルダに移動します:
 
@@ -153,19 +106,49 @@ cd path/to/your/projects-folder
 
 ```
 
-2. リポジトリをクローンします:
+2. 本リポジトリをクローンします:
 
 ```bash
 git clone https://github.com/your-organization/mario-forensic-lab.git
 
 ```
 
-3. リポジトリのディレクトリに移動します:
+3. クローンしたリポジトリのディレクトリに移動します:
 
 ```bash
 cd mario-forensic-lab
 
 ```
+
+### 🧪 動作確認（環境検証）
+
+お使いのOSに応じたコマンドを実行し、同梱されている `test_raylib.c` ファイルをコンパイルして実行します:
+
+- **Windows (コマンドプロンプト / PowerShell):**
+
+```cmd
+gcc test_raylib.c -o test_raylib.exe -lraylib -lopengl32 -lgdi32 -lwinmm
+.\test_raylib.exe
+
+```
+
+- **macOS (ターミナル):**
+
+```bash
+gcc test_raylib.c -o test_raylib -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+./test_raylib
+
+```
+
+- **Linux (ターミナル):**
+
+```bash
+gcc test_raylib.c -o test_raylib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+./test_raylib
+
+```
+
+赤い四角形と成功メッセージが表示されたグラフィックウィンドウがポップアップすれば、セッション1の準備は完了です！
 
 ---
 
@@ -192,6 +175,7 @@ Thay vì xây dựng đồ họa ngay từ ngày đầu tiên hoặc gõ từng 
 ## 🎮 Final Game Preview (Bản xem trước Game hoàn chỉnh)
 
 Dưới đây là bản xem trước của ứng dụng hoàn chỉnh mà bạn sẽ thiết kế, xác minh logic và tạo giao diện bằng Raylib vào cuối workshop:
+
 ![Mario Game](https://media.giphy.com/media/p0KEKXBzvuwtv8JYVb/giphy.gif)
 
 ---
@@ -208,131 +192,128 @@ Thông qua workshop thực hành này, bạn sẽ kết nối kiến thức lý 
 
 ---
 
-## 🛠️ Step-by-Step Installation Guide (Hướng dẫn Cài đặt Từng bước)
+## 🛠️ Cài đặt công cụ phát triển (Development Tools Installation)
 
-Hãy cài đặt development environment (môi trường phát triển) bắt buộc **trước Buổi 1**, làm theo chính xác các bước dành cho operating system (hệ điều hành) của bạn.
+Vui lòng cài đặt các công cụ dưới đây **trước Buổi 1 (Session 1)** theo hướng dẫn dành cho hệ điều hành của bạn.
 
-### 🪟 Cài đặt trên Windows (MSYS2 + MinGW-w64)
+### 1. Thiết lập trình biên dịch (Compiler) & Thư viện đồ họa Raylib
 
-1. **Cài đặt MSYS2:** Tải xuống installer (trình cài đặt) từ [msys2.org](https://www.msys2.org/) và cài đặt nó bằng default path (đường dẫn mặc định) (`C:\msys64`).
-2. **Cài đặt GCC, Make, và Raylib:**
-   Mở **MSYS2 UCRT64** từ Start Menu của bạn và chạy lệnh sau:
+#### 🪟 Windows (MSYS2 + MinGW-w64)
+
+1. Tải về và chạy bộ cài đặt từ [msys2.org](https://www.msys2.org/) (sử dụng đường dẫn mặc định `C:\msys64`).
+2. Mở **MSYS2 UCRT64** từ Start Menu và cài đặt GCC, Make, cùng Raylib:
 
 ```bash
 pacman -Syu
 pacman -S mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make mingw-w64-ucrt-x86_64-raylib
 
-
 ```
 
-3. **Thêm GCC vào Windows PATH (Biến môi trường Windows):**
+3. Thêm GCC vào biến môi trường PATH hệ thống (system PATH):
 
-- Nhấn `Win + R`, gõ `sysdm.cpl`, và nhấn **Enter**.
-- Điều hướng đến **Advanced** (Nâng cao) > **Environment Variables** (Biến môi trường).
-- Dưới mục **System variables** (Biến hệ thống), chọn `Path`, nhấp **Edit** (Chỉnh sửa), và thêm `C:\msys64\ucrt64\bin`.
-- Lưu và khởi động lại bất kỳ cửa sổ Command Prompt (`cmd` - Dòng lệnh) nào đang mở. Xác minh bằng cách gõ `gcc --version`.
+- Nhấn `Win + R`, nhập `sysdm.cpl`, rồi nhấn **Enter**.
+- Vào mục **Advanced (Nâng cao)** > **Environment Variables (Biến môi trường)** > nhấp đúp vào `Path` bên dưới mục System variables (Biến hệ thống).
+- Nhấp vào **New**, thêm `C:\msys64\ucrt64\bin`, và nhấn **OK**.
+- Khởi động lại các cửa sổ terminal đang mở và kiểm tra lại bằng lệnh: `gcc --version`
 
-4. **Compilation Command (Lệnh biên dịch):**
+#### 🍎 macOS (Homebrew + Apple Clang)
 
-```cmd
-gcc main.c -o game.exe -lraylib -lopengl32 -lgdi32 -lwinmm
-
-
-```
-
-### 🍎 Cài đặt trên macOS (Homebrew + Apple Clang)
-
-1. **Cài đặt Xcode Command Line Tools (Công cụ Dòng lệnh Xcode):**
-   Mở Terminal và chạy lệnh sau:
+1. Cài đặt Xcode Command Line Tools trong Terminal:
 
 ```bash
 xcode-select --install
 
-
 ```
 
-2. **Cài đặt Homebrew (nếu chưa cài đặt):**
+2. Cài đặt Homebrew (nếu chưa cài đặt):
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-
 ```
 
-3. **Cài đặt Raylib:**
+3. Cài đặt Raylib:
 
 ```bash
 brew install raylib
 
-
 ```
 
-4. **Compilation Command (Lệnh biên dịch):**
+#### 🐧 Linux (Ubuntu / Debian)
 
-```bash
-gcc main.c -o game -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-
-
-```
-
-### 🐧 Cài đặt trên Linux (Ubuntu / Debian)
-
-1. **Cài đặt Build Tools (Công cụ xây dựng) & Raylib:**
-   Mở Terminal và chạy lệnh sau:
+Cài đặt GCC, Make, Git và Raylib kèm theo các header file phát triển (development headers):
 
 ```bash
 sudo apt update
 sudo apt install -y build-essential git libraylib-dev libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev
 
-
 ```
 
-2. **Compilation Command (Lệnh biên dịch):**
+---
+
+### 2. Thiết lập các công cụ chung
+
+- **Git CLI:** Tải về và cài đặt từ [git-scm.com](https://git-scm.com/).
+- **Visual Studio Code:** Tải về từ [code.visualstudio.com](https://code.visualstudio.com/).
+- Extension (tiện ích mở rộng) đề xuất: **C/C++** (do Microsoft phát triển) và **C/C++ Compile Run** hoặc **CMake Tools**.
+- **Claude Desktop / AI Assistant (Trợ lý AI):** Tải về từ [claude.ai/download](https://claude.ai/download) hoặc truy cập nền tảng được phân công.
+
+---
+
+## 🚀 Bước 3: Clone kho lưu trữ (Repository) & Xác nhận thiết lập
+
+Sau khi đã cài đặt xong các công cụ, hãy clone kho lưu trữ (repository) này và kiểm tra môi trường biên dịch (compilation environment) của bạn bằng tệp `test_raylib.c` đi kèm.
+
+1. Mở Terminal hoặc Command Prompt và di chuyển đến thư mục làm việc (workspace):
 
 ```bash
-gcc main.c -o game -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
-
-
-```
-
----
-
-### 🧰 Additional Required Tools (Các Công cụ Bắt buộc Bổ sung)
-
-- **Git CLI (Giao diện dòng lệnh Git):** Tải xuống và cài đặt từ [git-scm.com](https://git-scm.com/).
-- **Visual Studio Code:** Tải xuống từ [code.visualstudio.com](https://code.visualstudio.com/).
-- Extensions (Tiện ích mở rộng) được đề xuất: **C/C++** (bởi Microsoft) và **C/C++ Compile Run** hoặc **CMake Tools**.
-- **Claude Desktop / AI Assistant (Trợ lý AI):** Tải xuống từ [claude.ai/download](https://claude.ai/download) hoặc truy cập vào nền tảng được chỉ định của bạn.
-
----
-
-### 🧪 Environment Verification (Xác minh Môi trường) (`test_raylib.c`)
-
-Tạo một test file (tệp kiểm tra) có tên `test_raylib.c` và compile (biên dịch) nó để xác minh quá trình cài đặt của bạn:
-
-```c
-#include "raylib.h"
-
-int main(void) {
-    InitWindow(800, 450, "Mario Forensic Lab - Environment Test");
-    SetTargetFPS(60);
-
-    while (!WindowShouldClose()) {
-        BeginDrawing();
-            ClearBackground(RAYWHITE);
-            DrawText("Raylib environment successfully installed!", 150, 200, 20, DARKGRAY);
-            DrawRectangle(375, 250, 50, 50, RED);
-        EndDrawing();
-    }
-
-    CloseWindow();
-    return 0;
-}
-
+cd path/to/your/projects-folder
 
 ```
 
-Compile (Biên dịch) bằng cách sử dụng lệnh cụ thể cho OS (hệ điều hành) của bạn được liệt kê ở trên. Nếu một graphical window (cửa sổ đồ họa) hiển thị một hình vuông màu đỏ mở ra, môi trường của bạn đã sẵn sàng 100%!
+2. Clone kho lưu trữ này:
+
+```bash
+git clone https://github.com/your-organization/mario-forensic-lab.git
+
+```
+
+3. Truy cập vào thư mục của repository:
+
+```bash
+cd mario-forensic-lab
+
+```
+
+### 🧪 Kiểm tra môi trường (Environment Verification)
+
+Biên dịch (compile) và chạy tệp `test_raylib.c` đi kèm bằng lệnh tương ứng với hệ điều hành của bạn:
+
+- **Windows (Command Prompt / PowerShell):**
+
+```cmd
+gcc test_raylib.c -o test_raylib.exe -lraylib -lopengl32 -lgdi32 -lwinmm
+.\test_raylib.exe
+
+```
+
+- **macOS (Terminal):**
+
+```bash
+gcc test_raylib.c -o test_raylib -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+./test_raylib
+
+```
+
+- **Linux (Terminal):**
+
+```bash
+gcc test_raylib.c -o test_raylib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+./test_raylib
+
+```
+
+Nếu một cửa sổ đồ họa hiện lên hiển thị một hình vuông màu đỏ cùng thông báo thành công, môi trường của bạn đã sẵn sàng 100% cho Buổi 1!
 
 ---
 
